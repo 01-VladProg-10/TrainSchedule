@@ -1,0 +1,207 @@
+﻿<Window x:Class="TrainSchedule.TrainSearchWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TrainSchedule.Classes"
+        mc:Ignorable="d"
+        Title="TrainSearchWindow" Height="768" Width="1024">
+    <Window.Resources>
+        <!-- Конвертер для массивов -->
+        <local:ArrayToStringConverter x:Key="ArrayToStringConverter"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#1976D2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1565C0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="#E3F2FD"/>
+            <Setter Property="Foreground" Value="#1976D2"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- Конвертер для скрытия/отображения текста -->
+        <local:VisibilityConverter x:Key="VisibilityConverter"/>
+
+        <!-- Стиль для кнопки выбора времени -->
+        <Style x:Key="TimeButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="IsTextSearchEnabled" Value="True"/>
+            <Setter Property="StaysOpenOnEdit" Value="True"/>
+            <Setter Property="MaxDropDownHeight" Value="200"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя панель с полями ввода -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0">
+            <!-- Поле "откуда" -->
+            <Grid>
+                <ComboBox x:Name="FromComboBox" Width="180" 
+                      TextBoxBase.TextChanged="FromComboBox_TextChanged"
+                      SelectionChanged="FromComboBox_SelectionChanged"
+                      DropDownOpened="FromComboBox_DropDownOpened"/>
+                <TextBlock Text="Z (Откуда)" Foreground="Gray" VerticalAlignment="Center" 
+                       Margin="5,0,0,0" IsHitTestVisible="False" 
+                       Visibility="{Binding Text.Length, ElementName=FromComboBox, Converter={StaticResource VisibilityConverter}}"/>
+            </Grid>
+            <!-- Поле "Куда" -->
+            <Grid Margin="10,0,10,0">
+                <ComboBox x:Name="ToComboBox" Width="180"
+                      TextBoxBase.TextChanged="ToComboBox_TextChanged"
+                      SelectionChanged="ToComboBox_SelectionChanged"
+                      DropDownOpened="ToComboBox_DropDownOpened"/>
+                <TextBlock Text="DO (Куда)" Foreground="Gray" VerticalAlignment="Center"
+                       Margin="5,0,0,0" IsHitTestVisible="False"
+                       Visibility="{Binding Text.Length, ElementName=ToComboBox, Converter={StaticResource VisibilityConverter}}"/>
+            </Grid>
+            <DatePicker x:Name="TravelDatePicker" Width="180"/>
+            <!-- Поле "Дата" -->
+            <!-- Кнопка выбора времени -->
+            <Button x:Name="TimeButton" Content="Выбрать время" Click="ShowTimePopup_Click" Width="136" Margin="10,0,10,0" Style="{StaticResource TimeButtonStyle}"/>
+            <!-- Кнопка поиска -->
+            <Button Content="Znajdź Połączenie" Width="180" Click="SearchButton_Click"/>
+        </StackPanel>
+
+        <!-- Попап для выбора времени -->
+        <Popup x:Name="TimePopup" PlacementTarget="{Binding ElementName=TimeButton}" StaysOpen="False">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Выберите время" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <StackPanel Orientation="Horizontal">
+                        <!-- Кнопки для выбора часов -->
+                        <StackPanel Orientation="Vertical">
+                            <Button Content="+" Width="40" Height="30" Click="IncreaseHour_Click"/>
+                            <TextBlock x:Name="HourText" Text="00" FontSize="16" HorizontalAlignment="Center"/>
+                            <Button Content="-" Width="40" Height="30" Click="DecreaseHour_Click"/>
+                        </StackPanel>
+
+                        <TextBlock Text=":" FontSize="18" VerticalAlignment="Center" Margin="5,0,5,0"/>
+
+                        <!-- Кнопки для выбора минут -->
+                        <StackPanel Orientation="Vertical">
+                            <Button Content="+" Width="40" Height="30" Click="IncreaseMinute_Click"/>
+                            <TextBlock x:Name="MinuteText" Text="00" FontSize="16" HorizontalAlignment="Center"/>
+                            <Button Content="-" Width="40" Height="30" Click="DecreaseMinute_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Кнопка подтверждения -->
+                    <Button Content="OK" Click="ConfirmTime_Click" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <!-- Блок информации -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Wyszukamy dla Ciebie najkorzystniejsze połączenie!"
+                   FontSize="20" Foreground="DarkBlue" FontWeight="Bold"/>
+            <TextBlock Text="Ważne informacje dla pasażerów"
+                   FontSize="16" Foreground="Gray" Width="253"/>
+        </StackPanel>
+
+        <!-- Список предложений -->
+        <ListView Grid.Row="1" x:Name="TrainListView" VerticalAlignment="Center" Height="400" Width="900" 
+              Margin="0,100,0,0" MouseDoubleClick="TrainListView_MouseDoubleClick" SelectionChanged="TrainListView_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Название поезда" Width="150" DisplayMemberBinding="{Binding TrainName}"/>
+                    <GridViewColumn Header="Станция отправления" Width="165" DisplayMemberBinding="{Binding StartStation}"/>
+                    <GridViewColumn Header="Станция прибытия" Width="160" DisplayMemberBinding="{Binding FinishStation}"/>
+                    <GridViewColumn Header="Время отправления" Width="155" DisplayMemberBinding="{Binding Departure}"/>
+                    <GridViewColumn Header="Время прибытия" Width="150" DisplayMemberBinding="{Binding Arrival}"/>
+                    <GridViewColumn Header="Цена" Width="115" DisplayMemberBinding="{Binding Price}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>
