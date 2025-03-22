@@ -52,6 +52,12 @@ namespace TrainSchedule
             HourText.Text = selectedHour.ToString("D2");
         }
 
+        private void LogOutButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Implement log out logic here (e.g., closing the window or navigating to a login screen)
+            MessageBox.Show("Logged out successfully!");
+        }
+
         private void IncreaseMinute_Click(object sender, RoutedEventArgs e)
         {
             selectedMinute = (selectedMinute + 15) % 60;

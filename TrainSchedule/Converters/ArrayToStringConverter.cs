@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace TrainSchedule.Classes
+namespace TrainSchedule.Converters
 {
-    class ArrayToStringConverter :IValueConverter
+    class ArrayToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

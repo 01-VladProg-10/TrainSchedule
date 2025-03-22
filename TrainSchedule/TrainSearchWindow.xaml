@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TrainSchedule.Classes"
+        xmlns:local="clr-namespace:TrainSchedule.Converters"
         mc:Ignorable="d"
-        Title="TrainSearchWindow" Height="768" Width="1024">
+        Title="TrainSearchWindow" Height="800" Width="1024">
     <Window.Resources>
-        <!-- Конвертер для массивов -->
+        <!-- Converter for arrays -->
         <local:ArrayToStringConverter x:Key="ArrayToStringConverter"/>
 
         <Style TargetType="Button">
@@ -71,10 +71,10 @@
             <Setter Property="FontSize" Value="14"/>
         </Style>
 
-        <!-- Конвертер для скрытия/отображения текста -->
+        <!-- Converter for hiding/showing text -->
         <local:VisibilityConverter x:Key="VisibilityConverter"/>
 
-        <!-- Стиль для кнопки выбора времени -->
+        <!-- Style for time selection button -->
         <Style x:Key="TimeButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="Black"/>
@@ -121,43 +121,49 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Верхняя панель с полями ввода -->
+        <!-- Top panel with input fields -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0">
-            <!-- Поле "откуда" -->
+            <!-- "From" field -->
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Add new row for the profile and log out button -->
+                </Grid.RowDefinitions>
                 <ComboBox x:Name="FromComboBox" Width="180" 
                       TextBoxBase.TextChanged="FromComboBox_TextChanged"
                       SelectionChanged="FromComboBox_SelectionChanged"
-                      DropDownOpened="FromComboBox_DropDownOpened"/>
-                <TextBlock Text="Z (Откуда)" Foreground="Gray" VerticalAlignment="Center" 
-                       Margin="5,0,0,0" IsHitTestVisible="False" 
-                       Visibility="{Binding Text.Length, ElementName=FromComboBox, Converter={StaticResource VisibilityConverter}}"/>
+                      DropDownOpened="FromComboBox_DropDownOpened" Margin="0,5,0,5" Grid.RowSpan="2"/>
+                <TextBlock Text="FROM" Foreground="Gray" VerticalAlignment="Top" 
+                       Margin="2,12,2,0" IsHitTestVisible="False" 
+                       Visibility="{Binding Text.Length, ElementName=FromComboBox, Converter={StaticResource VisibilityConverter}}" Grid.RowSpan="2"/>
             </Grid>
-            <!-- Поле "Куда" -->
+            <!-- "To" field -->
             <Grid Margin="10,0,10,0">
                 <ComboBox x:Name="ToComboBox" Width="180"
                       TextBoxBase.TextChanged="ToComboBox_TextChanged"
                       SelectionChanged="ToComboBox_SelectionChanged"
                       DropDownOpened="ToComboBox_DropDownOpened"/>
-                <TextBlock Text="DO (Куда)" Foreground="Gray" VerticalAlignment="Center"
+                <TextBlock Text="TO" Foreground="Gray" VerticalAlignment="Center"
                        Margin="5,0,0,0" IsHitTestVisible="False"
                        Visibility="{Binding Text.Length, ElementName=ToComboBox, Converter={StaticResource VisibilityConverter}}"/>
             </Grid>
             <DatePicker x:Name="TravelDatePicker" Width="180"/>
-            <!-- Поле "Дата" -->
-            <!-- Кнопка выбора времени -->
-            <Button x:Name="TimeButton" Content="Выбрать время" Click="ShowTimePopup_Click" Width="136" Margin="10,0,10,0" Style="{StaticResource TimeButtonStyle}"/>
-            <!-- Кнопка поиска -->
-            <Button Content="Znajdź Połączenie" Width="180" Click="SearchButton_Click"/>
+            <!-- "Date" field -->
+            <!-- Time selection button -->
+            <Button x:Name="TimeButton" Content="Select Time" Click="ShowTimePopup_Click" Width="136" Margin="10,0,10,0" Style="{StaticResource TimeButtonStyle}"/>
+            <!-- Search button -->
+            <Button Content="Find Connection" Width="180" Click="SearchButton_Click"/>
         </StackPanel>
 
-        <!-- Попап для выбора времени -->
+        <!-- Popup for time selection -->
         <Popup x:Name="TimePopup" PlacementTarget="{Binding ElementName=TimeButton}" StaysOpen="False">
             <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10">
                 <StackPanel>
-                    <TextBlock Text="Выберите время" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="Select Time" FontWeight="Bold" Margin="0,0,0,5"/>
                     <StackPanel Orientation="Horizontal">
-                        <!-- Кнопки для выбора часов -->
+                        <!-- Hour selection buttons -->
                         <StackPanel Orientation="Vertical">
                             <Button Content="+" Width="40" Height="30" Click="IncreaseHour_Click"/>
                             <TextBlock x:Name="HourText" Text="00" FontSize="16" HorizontalAlignment="Center"/>
@@ -166,7 +172,7 @@
 
                         <TextBlock Text=":" FontSize="18" VerticalAlignment="Center" Margin="5,0,5,0"/>
 
-                        <!-- Кнопки для выбора минут -->
+                        <!-- Minute selection buttons -->
                         <StackPanel Orientation="Vertical">
                             <Button Content="+" Width="40" Height="30" Click="IncreaseMinute_Click"/>
                             <TextBlock x:Name="MinuteText" Text="00" FontSize="16" HorizontalAlignment="Center"/>
@@ -174,34 +180,45 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <!-- Кнопка подтверждения -->
+                    <!-- Confirm button -->
                     <Button Content="OK" Click="ConfirmTime_Click" Margin="0,5,0,0"/>
                 </StackPanel>
             </Border>
         </Popup>
 
-        <!-- Блок информации -->
+        <!-- Information block -->
         <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Wyszukamy dla Ciebie najkorzystniejsze połączenie!"
+            <TextBlock Text="We will find the best connection for you!"
                    FontSize="20" Foreground="DarkBlue" FontWeight="Bold"/>
-            <TextBlock Text="Ważne informacje dla pasażerów"
+            <TextBlock Text="Important information for passengers"
                    FontSize="16" Foreground="Gray" Width="253"/>
         </StackPanel>
 
-        <!-- Список предложений -->
+        <!-- List of options -->
         <ListView Grid.Row="1" x:Name="TrainListView" VerticalAlignment="Center" Height="400" Width="900" 
               Margin="0,100,0,0" MouseDoubleClick="TrainListView_MouseDoubleClick" SelectionChanged="TrainListView_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Название поезда" Width="150" DisplayMemberBinding="{Binding TrainName}"/>
-                    <GridViewColumn Header="Станция отправления" Width="165" DisplayMemberBinding="{Binding StartStation}"/>
-                    <GridViewColumn Header="Станция прибытия" Width="160" DisplayMemberBinding="{Binding FinishStation}"/>
-                    <GridViewColumn Header="Время отправления" Width="155" DisplayMemberBinding="{Binding Departure}"/>
-                    <GridViewColumn Header="Время прибытия" Width="150" DisplayMemberBinding="{Binding Arrival}"/>
-                    <GridViewColumn Header="Цена" Width="115" DisplayMemberBinding="{Binding Price}"/>
+                    <GridViewColumn Header="Train Name" Width="150" DisplayMemberBinding="{Binding TrainName}"/>
+                    <GridViewColumn Header="Departure Station" Width="165" DisplayMemberBinding="{Binding StartStation}"/>
+                    <GridViewColumn Header="Arrival Station" Width="160" DisplayMemberBinding="{Binding FinishStation}"/>
+                    <GridViewColumn Header="Departure Time" Width="155" DisplayMemberBinding="{Binding Departure}"/>
+                    <GridViewColumn Header="Arrival Time" Width="150" DisplayMemberBinding="{Binding Arrival}"/>
+                    <GridViewColumn Header="Price" Width="115" DisplayMemberBinding="{Binding Price}"/>
                 </GridView>
             </ListView.View>
         </ListView>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,600,0,20">
+            <!-- Circle with first letter -->
+            <Border Width="50" Height="50" BorderBrush="#1976D2" BorderThickness="2" Background="#1976D2" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="25">
+                <TextBlock Text="A" FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
 
+            <!-- Full name -->
+            <TextBlock Text="John Doe" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" />
+
+            <!-- Log out button -->
+            <Button Content="Log Out" Width="100" Height="40" Margin="660,0,0,0" Click="LogOutButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

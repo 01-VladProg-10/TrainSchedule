@@ -82,12 +82,20 @@ namespace TrainSchedule.ViewModels
             {
                 // Używamy zaszyfrowanego zapisu danych użytkownika z parametrem `user`
                 MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Tworzymy i pokazujemy okno TrainSearchWindow po zalogowaniu
+                TrainSearchWindow trainSearchWindow = new TrainSearchWindow();
+                trainSearchWindow.Show();
+
+                // Opcjonalnie: zamknij okno logowania
+                Application.Current.MainWindow.Close();
             }
             else
             {
                 ErrorMessage = "Login failed. Please check your email or password.";
             }
         }
+
         private string ComputeSha256Hash(string rawData)
         {
             using (SHA256 sha256Hash = SHA256.Create())
