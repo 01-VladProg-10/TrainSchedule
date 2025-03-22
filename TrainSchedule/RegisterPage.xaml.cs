@@ -35,148 +35,19 @@ namespace TrainSchedule
             this.NavigationService.Navigate(new LogInPage());
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            string? email = EmailTextBox.Text;
-            string? password = PasswordBox.Password;
-            string? confirmPassword = ConfirmPasswordBox.Password;
-            string? firstName = FirstNameTextBox.Text;
-            string? lastName = LastNameTextBox.Text;
-            string? phoneNumber = PhoneNumberTextBox.Text;
-            string? ticketType = (TicketTypeComboBox.SelectedItem as System.Windows.Controls.ComboBoxItem)?.Content?.ToString();
-
-            bool isValid = true;
-            string errorMessage = "";
-
-            if (!ValidationEmail(ref email))
+            if (DataContext is RegistrationViewModel vm)
             {
-                isValid = false;
-                errorMessage += "Invalid email.\n";
-            }
-
-            if (!ValidationPhoneNumber(ref phoneNumber))
-            {
-                isValid = false;
-                errorMessage += "Invalid phone number.\n";
-            }
-
-            if (password != confirmPassword || string.IsNullOrEmpty(password))
-            {
-                isValid = false;
-                errorMessage += "Invalid passwords.\n";
-            }
-
-            if (!ValidationName(ref firstName) || !ValidationName(ref lastName))
-            {
-                isValid = false;
-                errorMessage += "Invalid name or last name.\n";
-            }
-
-            if (ticketType == null)
-            {
-                isValid = false;
-                errorMessage += "You need to select a type of ticket.\n";
-            }
-
-            if (isValid)
-            {
-                User user = new User { Email = email, Password = password, 
-                    FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, TicketType = ticketType };
-
-                RegistrationViewModel viewModel = new RegistrationViewModel(user);
-                viewModel.RegisterUser();
-                if (viewModel.IsRegistering == true)
-                {
-                    MessageBox.Show("Registration successful!");
-                    ErrorTextBlock.Text = "";
-                    this.NavigationService.Navigate(new LogInPage());
-                }
-            }
-            else
-            {
-                ErrorTextBlock.Visibility = Visibility.Visible;
-                ErrorTextBlock.Text = errorMessage;
+                vm.User.Password = ((PasswordBox)sender).Password;
             }
         }
 
-
-        private void EmailBox_GotFocus(object sender, RoutedEventArgs e)
+        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            var textBox = sender as TextBox;
-            if (textBox != null && textBox.Text == "example@email.com")
+            if (DataContext is RegistrationViewModel vm)
             {
-                textBox.Text = "";
-                textBox.Foreground = Brushes.Black;
-            }
-        }
-
-        private void EmailBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.Text = "example@email.com";
-                textBox.Foreground = Brushes.Gray;
-            }
-        }
-
-        private void FirstNameBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox != null && textBox.Text == "Example")
-            {
-                textBox.Text = "";
-                textBox.Foreground = Brushes.Black;
-            }
-        }
-
-        private void FirstNameBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.Text = "Example";
-                textBox.Foreground = Brushes.Gray;
-            }
-        }
-
-        private void LastNameBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox != null && textBox.Text == "Example")
-            {
-                textBox.Text = "";
-                textBox.Foreground = Brushes.Black;
-            }
-        }
-
-        private void LastNameBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.Text = "Example";
-                textBox.Foreground = Brushes.Gray;
-            }
-        }
-
-        private void PhoneNumberBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox != null && textBox.Text == "111111111")
-            {
-                textBox.Text = "";
-                textBox.Foreground = Brushes.Black;
-            }
-        }
-
-        private void PhoneNumberBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.Text = "111111111";
-                textBox.Foreground = Brushes.Gray;
+                vm.ConfirmPassword = ((PasswordBox)sender).Password;
             }
         }
 

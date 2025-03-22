@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TrainSchedule.Models;
 
 namespace TrainSchedule
 {
@@ -22,7 +23,7 @@ namespace TrainSchedule
     {
         public ObservableCollection<StationDetail> StationDetails { get; set; }
 
-        public TrainDetailsWindow(Train train)
+        public TrainDetailsWindow(TrainModel train)
         {
             InitializeComponent();
             DataContext = train;
@@ -38,15 +39,7 @@ namespace TrainSchedule
             });
 
             // Добавляем промежуточные станции
-            for (int i = 0; i < train.Stations.Length; i++)
-            {
-                StationDetails.Add(new StationDetail
-                {
-                    StationName = train.Stations[i],
-                    DepartureTime = train.StationsDepartureTime[i],
-                    ArrivalTime = train.StationsArrivalTime[i]
-                });
-            }
+            
 
             // Добавляем конечную станцию
             StationDetails.Add(new StationDetail

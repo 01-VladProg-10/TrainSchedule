@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TrainSchedule.Models;
 
 namespace TrainSchedule
 {
@@ -155,31 +156,25 @@ namespace TrainSchedule
             string to = ToComboBox.Text;
             DateTime date = TravelDatePicker.SelectedDate ?? DateTime.Now;
 
-            var results = new List<Train>
+            var results = new List<TrainModel>
         {
-            new Train
+            new TrainModel
             {
                 TrainName = "IC 12345",
                 StartStation = "Варшава",
                 FinishStation = "Краков",
                 Departure = "16:00",
                 Arrival = "18:30",
-                Price = "50 PLN",
-                Stations = new[] { "Лодзь", "Катовице" },
-                StationsDepartureTime = new[] { "16:45", "17:30" },
-                StationsArrivalTime = new[] { "16:50", "17:35" }
+                Price = "50 PLN"
             },
-            new Train
+            new TrainModel
             {
                 TrainName = "TLK 67890",
                 StartStation = "Варшава",
                 FinishStation = "Краков",
                 Departure = "17:10",
                 Arrival = "19:40",
-                Price = "45 PLN",
-                Stations = new[] { "Лодзь", "Катовице" },
-                StationsDepartureTime = new[] { "17:55", "18:40" },
-                StationsArrivalTime = new[] { "18:00", "18:45" }
+                Price = "45 PLN"
             }
         };
 
@@ -188,7 +183,7 @@ namespace TrainSchedule
 
         private void TrainListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (TrainListView.SelectedItem is Train selectedTrain)
+            if (TrainListView.SelectedItem is TrainModel selectedTrain)
             {
                 var detailsWindow = new TrainDetailsWindow(selectedTrain);
                 detailsWindow.Show();
@@ -200,17 +195,4 @@ namespace TrainSchedule
 
         }
     }
-    public class TrainRoute
-    {
-        public string TrainName { get; set; }
-        public string StartStation { get; set; }
-        public string FinishStation { get; set; }
-        public string[] StationsDepartureTime { get; set; }
-        public string[] StationsArrivalTime { get; set; }
-        public string[] Stations { get; set; }
-        public string Departure { get; set; }
-        public string Arrival { get; set; }
-        public string Price { get; set; }
-    }
-
 }
