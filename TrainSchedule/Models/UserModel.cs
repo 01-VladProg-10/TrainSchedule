@@ -25,6 +25,7 @@ namespace TrainSchedule.Models
 
         [Required(ErrorMessage = "Ticket Type is required.")]
         public string TicketType { get; set; } = string.Empty;
+        public bool IsAdmin { get; set; } = false;
 
         // Metoda do walidacji danych
         public bool Validate(out string errorMessage)

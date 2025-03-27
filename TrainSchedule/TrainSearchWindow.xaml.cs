@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TrainSchedule.Models;
+using TrainSchedule.ViewModels;
 
 namespace TrainSchedule
 {
@@ -23,17 +24,38 @@ namespace TrainSchedule
         private int selectedHour = 0;
         private int selectedMinute = 0;
         private List<string> polishCities = new List<string>
-    {
+        {
         "Warszawa", "Krakow", "Lodz", "Wroclaw", "Poznan", "Gdansk", "Szczecin", "Bydgoszcz", "Lublin", "Katowice",
         "Bialystok", "Gdynia", "Czestochowa", "Radom", "Sosnowiec", "Torun", "Kielce", "Gliwice", "Zabrze", "Bytom",
         "Bielsko-Biala", "Olsztyn", "Rybnik", "Prudnik", "Przemysl", "Opole"
-    };
+        };
 
         public TrainSearchWindow()
         {
             InitializeComponent();
             TravelDatePicker.SelectedDate = DateTime.Now;
+
+            var user = DatabaseService.LoadUserFromConfig();
+            if (user != null)
+            {
+                UserNameTextBlock.Text = $"{user.FirstName} {user.LastName}";  // Ustawienie imienia i nazwiska użytkownika
+                UserInitialTextBlock.Text = user.FirstName.Substring(0, 1).ToUpper();  // Pierwsza litera w okręgu
+
+                // Sprawdzenie, czy użytkownik jest administratorem
+                if (user.IsAdmin)
+                {
+                    AddTrainButton.Visibility = Visibility.Visible; // Pokazanie przycisku dodawania pociągu
+                }
+            }
         }
+
+        private void AddTrainButton_Click(object sender, RoutedEventArgs e)
+        {
+            //var addTrainWindow = new AddTrainWindow();  // Otwieranie okna do dodawania pociągów
+            //addTrainWindow.Show();
+        }
+
+        private void EditTrainButton_Click(object sender, RoutedEventArgs e) { }
 
         private void ShowTimePopup_Click(object sender, RoutedEventArgs e)
         {
@@ -167,8 +189,8 @@ namespace TrainSchedule
             new TrainModel
             {
                 TrainName = "IC 12345",
-                StartStation = "Варшава",
-                FinishStation = "Краков",
+                StartStation = "Opole",
+                FinishStation = "Warszawa",
                 Departure = "16:00",
                 Arrival = "18:30",
                 Price = "50 PLN"
@@ -176,8 +198,8 @@ namespace TrainSchedule
             new TrainModel
             {
                 TrainName = "TLK 67890",
-                StartStation = "Варшава",
-                FinishStation = "Краков",
+                StartStation = "Opole",
+                FinishStation = "Warszawa",
                 Departure = "17:10",
                 Arrival = "19:40",
                 Price = "45 PLN"

@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrainSchedule.Converters"
         mc:Ignorable="d"
-        Title="TrainSearchWindow" Height="800" Width="1024">
+        Title="TrainSearchWindow" Height="800" Width="1024"
+        Icon="pack://application:,,,/Images/trainMainIcon.png">
+
     <Window.Resources>
         <!-- Converter for arrays -->
         <local:ArrayToStringConverter x:Key="ArrayToStringConverter"/>
@@ -205,20 +207,60 @@
                     <GridViewColumn Header="Departure Time" Width="155" DisplayMemberBinding="{Binding Departure}"/>
                     <GridViewColumn Header="Arrival Time" Width="150" DisplayMemberBinding="{Binding Arrival}"/>
                     <GridViewColumn Header="Price" Width="115" DisplayMemberBinding="{Binding Price}"/>
+
+                    <!-- Kolumna dla przycisku Edit -->
+                    <GridViewColumn Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Edit" 
+                                    Click="EditTrainButton_Click" 
+                                    Visibility="{Binding IsAdmin, Converter={StaticResource VisibilityConverter}}"
+                                    Width="80" Height="30" 
+                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
+
         </ListView>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,600,0,20">
-            <!-- Circle with first letter -->
-            <Border Width="50" Height="50" BorderBrush="#1976D2" BorderThickness="2" Background="#1976D2" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="25">
-                <TextBlock Text="A" FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Width="900" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,600,0,20">
+            <!-- Kontener na Grid z trzema kolumnami -->
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="900">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Kolumna dla inicjału i nazwiska -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Kolumna do wypełnienia przestrzeni -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Kolumna dla przycisków -->
+                </Grid.ColumnDefinitions>
 
-            <!-- Full name -->
-            <TextBlock Text="John Doe" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" />
+                <!-- Kolumna 1 - Inicjał i imię użytkownika, wyrównane do lewej -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0">
+                    <!-- Okrąg z pierwszą literą -->
+                    <Border Width="50" Height="50" BorderBrush="#1976D2" BorderThickness="2" Background="#1976D2"
+                    CornerRadius="25">
+                        <TextBlock x:Name="UserInitialTextBlock" Text="A" FontSize="24" FontWeight="Bold" Foreground="White"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
 
-            <!-- Log out button -->
-            <Button Content="Log Out" Width="100" Height="40" Margin="660,0,0,0" Click="LogOutButton_Click"/>
+                    <!-- Pełne imię i nazwisko -->
+                    <TextBlock x:Name="UserNameTextBlock" Text="John Doe" FontSize="18" VerticalAlignment="Center"
+                       Margin="10,0,20,0"/>
+                </StackPanel>
+
+                <!-- Kolumna 3 - Przycisk "Dodaj pociąg" i "Log Out", wyrównane do prawej -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <!-- Przycisk "Dodaj pociąg" (Domyślnie ukryty) -->
+                    <Button x:Name="AddTrainButton" Content="Add Train" Width="130" Height="40" 
+                    Click="AddTrainButton_Click" Visibility="Collapsed" Margin="0,0,10,0"/>
+
+                    <!-- Przycisk "Log Out" -->
+                    <Button Content="Log Out" Width="100" Height="40" Click="LogOutButton_Click"/>
+                </StackPanel>
+            </Grid>
         </StackPanel>
+
     </Grid>
 </Window>
