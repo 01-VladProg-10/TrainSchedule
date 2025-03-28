@@ -29,6 +29,7 @@ namespace TrainSchedule
         "Bialystok", "Gdynia", "Czestochowa", "Radom", "Sosnowiec", "Torun", "Kielce", "Gliwice", "Zabrze", "Bytom",
         "Bielsko-Biala", "Olsztyn", "Rybnik", "Prudnik", "Przemysl", "Opole"
         };
+        public bool IsAdmin { get; private set; }
 
         public TrainSearchWindow()
         {
@@ -38,24 +39,85 @@ namespace TrainSchedule
             var user = DatabaseService.LoadUserFromConfig();
             if (user != null)
             {
-                UserNameTextBlock.Text = $"{user.FirstName} {user.LastName}";  // Ustawienie imienia i nazwiska użytkownika
-                UserInitialTextBlock.Text = user.FirstName.Substring(0, 1).ToUpper();  // Pierwsza litera w okręgu
+                UserNameTextBlock.Text = $"{user.FirstName} {user.LastName}";
+                UserInitialTextBlock.Text = user.FirstName.Substring(0, 1).ToUpper();
 
-                // Sprawdzenie, czy użytkownik jest administratorem
+                IsAdmin = user.IsAdmin;  // Ustawienie wartości dla bindowania
+                DataContext = this;       // Ustawienie kontekstu dla bindowania w XAML
+
                 if (user.IsAdmin)
                 {
-                    AddTrainButton.Visibility = Visibility.Visible; // Pokazanie przycisku dodawania pociągu
+                    AddTrainButton.Visibility = Visibility.Visible;
                 }
             }
         }
-
         private void AddTrainButton_Click(object sender, RoutedEventArgs e)
         {
-            //var addTrainWindow = new AddTrainWindow();  // Otwieranie okna do dodawania pociągów
-            //addTrainWindow.Show();
+            // Tworzymy nowe okno AddTrainWindow
+            var addTrainWindow = new AddTrainWindow();
+
+            // Pokazujemy okno
+            addTrainWindow.Show();
         }
 
-        private void EditTrainButton_Click(object sender, RoutedEventArgs e) { }
+        private void DeleteTrainButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Pobierz wybrany pociąg z ListView (lub innego kontrolera, z którego korzystasz)
+            var selectedTrain = TrainListView.SelectedItem as TrainModel;
+
+            if (selectedTrain != null)
+            {
+                // Potwierdzenie przed usunięciem
+                var result = MessageBox.Show("Czy na pewno chcesz usunąć ten pociąg?", "Potwierdzenie", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Usunięcie pociągu z bazy danych
+                    bool success = DatabaseService.DeleteTrain(selectedTrain.TrainName);
+
+                    if (success)
+                    {
+                        MessageBox.Show("Pociąg został usunięty z bazy danych.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        // Odświeżenie listy pociągów (np. wywołanie ponownie metody Search)
+                        string from = FromComboBox.Text;
+                        string to = ToComboBox.Text;
+                        string selectedTime = TimeButton.Content.ToString();
+                        var results = DatabaseService.GetTrains(from, to, selectedTime);
+                        TrainListView.ItemsSource = results;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Wystąpił problem podczas usuwania pociągu.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Nie wybrano pociągu do usunięcia.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void EditTrainButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the selected train from the ListView
+            var selectedTrain = TrainListView.SelectedItem as TrainModel;
+
+            if (selectedTrain != null)
+            {
+                // Open the EditTrainWindow and pass the selected train to it
+                EditTrainWindow editWindow = new EditTrainWindow
+                {
+                    DataContext = new EditTrainViewModel(selectedTrain) // Bind the selected train to the ViewModel
+                };
+                editWindow.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Nie wybrano pociągu do edytowania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
 
         private void ShowTimePopup_Click(object sender, RoutedEventArgs e)
         {
@@ -76,9 +138,20 @@ namespace TrainSchedule
 
         private void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement log out logic here (e.g., closing the window or navigating to a login screen)
-            MessageBox.Show("Logged out successfully!");
+            // Ustawienie nowego okna głównego
+            MainWindow mainWindow = new MainWindow();
+
+            // Ustawienie nowego okna jako głównego okna aplikacji
+            Application.Current.MainWindow = mainWindow;
+
+            // Zamknięcie bieżącego okna (TrainSearchWindow)
+            this.Close();
+
+            // Wyświetlenie nowego okna głównego
+            mainWindow.Show();
         }
+
+
 
         private void IncreaseMinute_Click(object sender, RoutedEventArgs e)
         {
@@ -182,32 +255,13 @@ namespace TrainSchedule
         {
             string from = FromComboBox.Text;
             string to = ToComboBox.Text;
-            DateTime date = TravelDatePicker.SelectedDate ?? DateTime.Now;
+            string selectedTime = TimeButton.Content.ToString();
 
-            var results = new List<TrainModel>
-        {
-            new TrainModel
-            {
-                TrainName = "IC 12345",
-                StartStation = "Opole",
-                FinishStation = "Warszawa",
-                Departure = "16:00",
-                Arrival = "18:30",
-                Price = "50 PLN"
-            },
-            new TrainModel
-            {
-                TrainName = "TLK 67890",
-                StartStation = "Opole",
-                FinishStation = "Warszawa",
-                Departure = "17:10",
-                Arrival = "19:40",
-                Price = "45 PLN"
-            }
-        };
-
+            var results = DatabaseService.GetTrains(from, to, selectedTime);
             TrainListView.ItemsSource = results;
         }
+
+
 
         private void TrainListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {

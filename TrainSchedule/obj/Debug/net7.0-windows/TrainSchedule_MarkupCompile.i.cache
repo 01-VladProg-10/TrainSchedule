@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET7_0;NETCOREAPP
 C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\App.xaml
-5-807164885
+7-1740863352
 
-20-1019295365
+22-642667087
 202-304059481
-LogInPage.xaml;MainWindow.xaml;RegisterPage.xaml;TrainDetailsWindow.xaml;TrainSearchWindow.xaml;
+AddTrainWindow.xaml;EditTrainWindow.xaml;LogInPage.xaml;MainWindow.xaml;RegisterPage.xaml;TrainDetailsWindow.xaml;TrainSearchWindow.xaml;
 
 False
 

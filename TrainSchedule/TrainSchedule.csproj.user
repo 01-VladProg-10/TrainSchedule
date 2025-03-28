@@ -7,6 +7,12 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="AddTrainWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="EditTrainWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="LogInPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -21,6 +27,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="AddTrainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="EditTrainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="LogInPage.xaml">
       <SubType>Designer</SubType>
     </Page>

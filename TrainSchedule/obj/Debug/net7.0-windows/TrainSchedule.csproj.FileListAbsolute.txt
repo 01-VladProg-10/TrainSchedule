@@ -38,3 +38,7 @@ C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\obj\Debug\net7.0-windows\T
 C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\obj\Debug\net7.0-windows\TrainSearchWindow.g.cs
 C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\obj\Debug\net7.0-windows\TrainSearchWindow.baml
 C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\obj\Debug\net7.0-windows\App.baml
+C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\obj\Debug\net7.0-windows\AddTrainWindow.baml
+C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\obj\Debug\net7.0-windows\AddTrainWindow.g.cs
+C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\obj\Debug\net7.0-windows\EditTrainWindow.g.cs
+C:\Moje\ProgramInVisual22\TrainSchedule\TrainSchedule\obj\Debug\net7.0-windows\EditTrainWindow.baml

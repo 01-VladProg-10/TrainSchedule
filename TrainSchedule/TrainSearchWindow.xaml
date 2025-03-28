@@ -9,7 +9,6 @@
         Icon="pack://application:,,,/Images/trainMainIcon.png">
 
     <Window.Resources>
-        <!-- Converter for arrays -->
         <local:ArrayToStringConverter x:Key="ArrayToStringConverter"/>
 
         <Style TargetType="Button">
@@ -201,28 +200,36 @@
               Margin="0,100,0,0" MouseDoubleClick="TrainListView_MouseDoubleClick" SelectionChanged="TrainListView_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Train Name" Width="150" DisplayMemberBinding="{Binding TrainName}"/>
-                    <GridViewColumn Header="Departure Station" Width="165" DisplayMemberBinding="{Binding StartStation}"/>
-                    <GridViewColumn Header="Arrival Station" Width="160" DisplayMemberBinding="{Binding FinishStation}"/>
-                    <GridViewColumn Header="Departure Time" Width="155" DisplayMemberBinding="{Binding Departure}"/>
-                    <GridViewColumn Header="Arrival Time" Width="150" DisplayMemberBinding="{Binding Arrival}"/>
-                    <GridViewColumn Header="Price" Width="115" DisplayMemberBinding="{Binding Price}"/>
+                    <GridViewColumn Header="Train Name" Width="120" DisplayMemberBinding="{Binding TrainName}"/>
+                    <GridViewColumn Header="Departure Station" Width="120" DisplayMemberBinding="{Binding StartStation}"/>
+                    <GridViewColumn Header="Arrival Station" Width="120" DisplayMemberBinding="{Binding FinishStation}"/>
+                    <GridViewColumn Header="Departure Time" Width="115" DisplayMemberBinding="{Binding Departure}"/>
+                    <GridViewColumn Header="Arrival Time" Width="115" DisplayMemberBinding="{Binding Arrival}"/>
+                    <GridViewColumn Header="Price" Width="110" DisplayMemberBinding="{Binding Price}"/>
 
-                    <!-- Kolumna dla przycisku Edit -->
-                    <GridViewColumn Width="100">
+                    <!-- Edit and Delete button columns -->
+                    <GridViewColumn Width="200">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Edit" 
-                                    Click="EditTrainButton_Click" 
-                                    Visibility="{Binding IsAdmin, Converter={StaticResource VisibilityConverter}}"
-                                    Width="80" Height="30" 
-                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <Grid HorizontalAlignment="Center">
+                                    <!-- Możesz użyć StackPanel, aby przyciski były obok siebie -->
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Content="Edit" Click="EditTrainButton_Click" 
+                                            Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource VisibilityConverter}}"
+                                            Width="80" Height="30" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        <Button Content="Delete" Click="DeleteTrainButton_Click" 
+                                            Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource VisibilityConverter}}"
+                                             Width="80" Height="30" Background="Red" Foreground="White" Margin="5,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        </GridViewColumn>
+
+
                 </GridView>
             </ListView.View>
-
         </ListView>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Width="900" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,600,0,20">
             <!-- Kontener na Grid z trzema kolumnami -->

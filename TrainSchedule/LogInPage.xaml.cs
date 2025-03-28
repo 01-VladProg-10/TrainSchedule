@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static TrainSchedule.Classes.Validation;
 using TrainSchedule.Models;
 using static TrainSchedule.ViewModels.LoginViewModel;
 using System.Net.Sockets;

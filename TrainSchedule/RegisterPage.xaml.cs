@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TrainSchedule.ViewModels;
-using static TrainSchedule.Classes.Validation;
 using static TrainSchedule.ViewModels.RegistrationViewModel;
 using TrainSchedule.Models;
 
